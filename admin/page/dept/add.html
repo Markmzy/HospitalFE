@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="utf-8">
+    <title>添加</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+
+    <input type="hidden" name="type" id="type">
+    <input type="hidden" name="parentId" id="parentId">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" lay-verify="required" lay-reqtext="名称不能为空" placeholder="请输入名称" value=""
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序号</label>
+        <div class="layui-input-block">
+            <input type="number" name="sort" placeholder="请输入排序号" value="" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="status" lay-skin="switch" lay-filter="switchTest" lay-text="正常|禁用">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'layer', 'axios','table'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        var table = layui.table;
+        var axios = layui.axios;
+        var $ = layui.$;
+
+
+        /**
+         * 初始化表单
+         */
+        form.render();
+
+
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            var data = data.field;
+            if (data.status == 'on') {
+                data.status = 1;
+            } else {
+                data.status = 0;
+            }
+            axios.post('dept/add', data).then(function (response) {
+                debugger
+                if (response.data.code == 200) {
+                    layer.msg(response.data.msg);
+                    //重新加载表格
+                    console.log(data);
+                    window.reload();
+                }
+                //关闭弹出页面
+                layer.close(parentIndex);
+            }).catch(err => {
+                    console.log(err);
+                }
+            );
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>
