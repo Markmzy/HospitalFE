@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="11">
+          <list size="12">
             <item index="0" class="java.lang.String" itemvalue="lay-verify" />
             <item index="1" class="java.lang.String" itemvalue="lay-submit" />
             <item index="2" class="java.lang.String" itemvalue="lay-filter" />
@@ -16,6 +16,7 @@
             <item index="8" class="java.lang.String" itemvalue="lay-href" />
             <item index="9" class="java.lang.String" itemvalue="lay-unselect" />
             <item index="10" class="java.lang.String" itemvalue="layuimini-tab-close" />
+            <item index="11" class="java.lang.String" itemvalue="lay-search" />
           </list>
         </value>
       </option>

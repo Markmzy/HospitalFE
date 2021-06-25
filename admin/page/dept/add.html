@@ -2,7 +2,7 @@
 <html lang="zh_CN">
 <head>
     <meta charset="utf-8">
-    <title>添加</title>
+    <title>添加科室</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -29,9 +29,21 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">排序号</label>
+        <label class="layui-form-label">建筑</label>
         <div class="layui-input-block">
-            <input type="number" name="sort" placeholder="请输入排序号" value="" class="layui-input">
+            <select name="building" lay-verify="">
+                <option value="">请选择一个建筑</option>
+                <option value="行政楼">行政楼</option>
+                <option value="住院楼">住院楼</option>
+                <option value="门诊楼">门诊楼</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">门牌号</label>
+        <div class="layui-input-block">
+            <input type="text" name="room" placeholder="请输入门牌号" value="" class="layui-input">
         </div>
     </div>
 
@@ -44,16 +56,15 @@
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认添加</button>
         </div>
     </div>
 </div>
 
 <script>
-    layui.use(['form', 'layer', 'axios','table'], function () {
+    layui.use(['form', 'layer', 'axios'], function () {
         var form = layui.form;
         var layer = layui.layer;
-        var table = layui.table;
         var axios = layui.axios;
         var $ = layui.$;
 

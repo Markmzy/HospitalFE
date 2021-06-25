@@ -115,6 +115,7 @@
                     <input type="text" name="username" lay-verify="required|account" placeholder="用户名或者邮箱"
                            autocomplete="off" class="layui-input" value="">
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-icon layui-icon-password"></label>
                     <input type="password" name="password" lay-verify="required|password" placeholder="密码"
@@ -153,7 +154,7 @@
             layer = layui.layer;
         axios = layui.axios;
 
-        // 登录过期的时候，跳出ifram框架
+        // 登录过期的时候，跳出iframe框架
         if (top.location != self.location) top.location = self.location;
 
         // 粒子线条背景
@@ -187,7 +188,6 @@
             values.roleName = data.roleName;
 
             axios.post('login', values).then(res => {
-                debugger
                 var data = res.data;
                 if (data.code == 200) {
                     // 获取token

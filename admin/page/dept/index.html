@@ -73,7 +73,9 @@
                 cols: [[
                     {type: 'numbers'},
                     {field: 'name', minWidth: 180, title: '名称'},
-                    {field: 'sort', title: '排序'},
+                    {field: 'num', width: 100, align: 'center', title: '人数'},
+                    {field: 'building', width: 120, align: 'center', title: '建筑'},
+                    {field: 'room', width: 120, align: 'center', title: '门牌号'},
                     {
                         field: 'type', width: 80, align: 'center', templet: function (d) {
                             if (d.type === 0) {
@@ -96,7 +98,7 @@
                             }
                         }, title: '状态'
                     },
-                    {templet: '#auth-state', width: 180, align: 'right', title: '操作'}
+                    {templet: '#auth-state', width: 180, align: 'center', title: '操作'}
                 ]],
                 done: function () {
                     layer.closeAll('loading');
@@ -119,15 +121,16 @@
 
 
         //数据的渲染
-        function setFormValues(data){
-            debugger
-            form.val("updateForm",{
-                id:data.id,
-                name:data.name,
-                sort:data.sort,
-                status:data.status,
-                type:data.type,
-                parentId:data.parentId
+        function setFormValues(data) {
+            form.val("updateForm", {
+                id: data.id,
+                name: data.name,
+                num: data.num,
+                status: data.status,
+                type: data.type,
+                parentId: data.parentId,
+                building: data.building,
+                room: data.room
             })
 
         }
@@ -139,16 +142,14 @@
 
             if (layEvent === 'delete') {
 
-                axios.post('dept/delete',{id:data.id}).then(function(response){
+                axios.post('dept/delete', {id: data.id}).then(function (response) {
                     debugger
-                    if(response.data.code==200){
+                    if (response.data.code == 200) {
                         layer.msg(response.data.msg);
                         //重新加载表格
                         window.reload()
                     }
-                    //关闭弹出页面
-                    layer.close(parentIndex);
-                }).catch(err=> {
+                }).catch(err => {
                         console.log(err);
                     }
                 );
@@ -162,7 +163,7 @@
                     title: '修改科室',
                     type: 1,
                     shade: 0.2,
-                    maxmin:true,
+                    maxmin: true,
                     shadeClose: true,
                     area: ['60%', '60%'],
                     content: content,
@@ -174,20 +175,20 @@
                     layer.full(index);
                 });
                 return false;
-            }else{
+            } else {
                 var content = miniPage.getHrefContent('add.html');
 
                 var index = layer.open({
                     title: '添加科室',
                     type: 1,
                     shade: 0.2,
-                    maxmin:true,
+                    maxmin: true,
                     shadeClose: true,
                     area: ['60%', '60%'],
                     content: content,
                 });
                 //设置隐藏值信息
-                $("#type").val(data.type+1);
+                $("#type").val(data.type + 1);
                 $("#parentId").val(data.id);
 
                 $(window).on("resize", function () {

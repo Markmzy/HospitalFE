@@ -23,7 +23,7 @@
           "child": [
             {
               "title": "医生管理",
-              "href": "page/doctor/index.html",
+              "href": "page/user/index.html",
               "icon": "fa fa-user-md",
               "target": "_self"
             },

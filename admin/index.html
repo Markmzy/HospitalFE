@@ -59,11 +59,11 @@
                     <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                 </li>
                 <li class="layui-nav-item layuimini-setting">
-                    <a href="javascript:;">用户</a>
+                    <a href="javascript:;"><span id="usernameInfo"></span></a>
                     <dl class="layui-nav-child">
                         <dd>
                             <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料"
-                               data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
+                               data-icon="fa fa-gears">基本资料</a>
                         </dd>
                         <dd>
                             <a href="javascript:;" layuimini-content-href="page/user-password.html" data-title="修改密码"
@@ -148,21 +148,16 @@
             pageAnim: true,             // iframe窗口动画
             maxTabNum: 20,              // 最大的tab打开数量
         };
-        miniAdmin.render(options);
 
-        // 百度统计代码，只统计指定域名
-        miniTongji.render({
-            specific: true,
-            domains: [
-                '99php.cn',
-                'layuimini.99php.cn',
-                'layuimini-onepage.99php.cn',
-            ],
-        });
+        var type = localStorage.getItem("type");
+        var usernames = localStorage.getItem("username");
+        $("#usernameInfo").html(usernames)
+
+        miniAdmin.render(options);
 
         $('.login-out').on("click", function () {
             layer.msg('退出登录成功', function () {
-                window.location = 'page/login-3.html';
+                window.location = 'login.html';
             });
         });
     });
