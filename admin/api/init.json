@@ -11,7 +11,7 @@
   "menuInfo": [
     {
       "title": "医院管理",
-      "icon" : "fa fa-hospital-o",
+      "icon": "fa fa-hospital-o",
       "href": "",
       "target": "_self",
       "child": [
