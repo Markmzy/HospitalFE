@@ -138,7 +138,7 @@
         });
 
         // 渲染职称
-        axios.post('titleInfo/titleAll', {}).then(function (res) {
+        axios.post('title/titleAll', {}).then(function (res) {
             res.data.forEach(item => {
                 let option = `<option value="${item.name}">${item.name}</option>`
                 $('#jobTitle_add').append(option);

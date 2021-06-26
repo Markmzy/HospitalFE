@@ -139,7 +139,7 @@
 
 
         //渲染 职称信息
-        axios.post('titleInfo/titleAll', {}).then(function (res) {
+        axios.post('title/titleAll', {}).then(function (res) {
             let option = ' <option value="">请选择职称</option>';
             res.data.forEach(item => {
                 if (item.name == $("#jobTitle").val()) {

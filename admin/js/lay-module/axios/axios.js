@@ -1793,7 +1793,7 @@ layui.define(function (exports) {
         var data = response.data;
         if (data.code == 200) {
             // 续期token
-            localStorage.setItem("token", response.headers.token);
+            // localStorage.setItem("token", response.headers.token);
             return response;
         } else if (data.code == 400) {
             layer.msg('登录失败', function () {

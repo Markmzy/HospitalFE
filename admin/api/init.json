@@ -22,6 +22,12 @@
           "target": "_self",
           "child": [
             {
+              "title": "科室管理",
+              "href": "page/dept/index.html",
+              "icon": "fa fa-group",
+              "target": "_self"
+            },
+            {
               "title": "医生管理",
               "href": "page/user/index.html",
               "icon": "fa fa-user-md",
@@ -31,12 +37,6 @@
               "title": "患者管理",
               "href": "page/patient/index.html",
               "icon": "fa fa-wheelchair",
-              "target": "_self"
-            },
-            {
-              "title": "科室管理",
-              "href": "page/dept/index.html",
-              "icon": "fa fa-group",
               "target": "_self"
             }
           ]

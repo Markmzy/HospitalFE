@@ -9,6 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="images/hospital-small.png">
     <link rel="stylesheet" href="lib/layui-v2.6.3/css/layui.css" media="all">
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -108,7 +109,7 @@
         <div class="layui-form login-form">
             <form class="layui-form" action="">
                 <div class="layui-form-item logo-title">
-                    <h1>医院后台登录</h1>
+                    <h1>深圳第一医院后台系统</h1>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-icon layui-icon-username"></label>
@@ -151,8 +152,8 @@
 <script>
     layui.use(['form', 'axios'], function () {
         var form = layui.form,
-            layer = layui.layer;
-        axios = layui.axios;
+            layer = layui.layer,
+            axios = layui.axios;
 
         // 登录过期的时候，跳出iframe框架
         if (top.location != self.location) top.location = self.location;
