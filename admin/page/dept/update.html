@@ -17,7 +17,7 @@
 <body>
 <div class="layuimini-main">
 
-    <div class="layui-form layuimini-form" lay-filter="updateForm">
+    <div class="layui-form layuimini-form" lay-filter="updateDept">
         <input type="hidden" name="type" id="type">
         <input type="hidden" name="parentId" id="parentId">
         <input type="hidden" name="id" id="id">
@@ -59,7 +59,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="updateForm">确认修改</button>
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="updateDept">确认修改</button>
             </div>
         </div>
     </div>
@@ -81,7 +81,7 @@
         var parentIndex = layer.index;
 
         //监听提交
-        form.on('submit(updateForm)', function (data) {
+        form.on('submit(updateDept)', function (data) {
             var data = data.field;
             if (data.status == 'on') {
                 data.status = 1;

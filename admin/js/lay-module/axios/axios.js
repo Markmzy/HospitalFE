@@ -1797,7 +1797,7 @@ layui.define(function (exports) {
             return response;
         } else if (data.code == 400) {
             layer.msg('登录失败', function () {
-                window.location = 'login.html';
+                window.location = '../../login.html';
             });
             return;
         }

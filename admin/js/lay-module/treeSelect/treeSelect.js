@@ -1,4 +1,5 @@
-layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以依赖其它模块，如：layui.define('layer', callback);
+
+layui.define(function(exports){
     var jQuery = layui.jquery,
         $ = jQuery,
         form = layui.form,
@@ -7,7 +8,6 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
         TreeSelect = function () {
             this.v = '1.0.0';
         };
-
     /*
  * JQuery zTree core v3.5.37
  * http://treejs.cn/
@@ -1052,10 +1052,7 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
                     if (node) {
                         node.isAjaxing = true;
                         var icoObj = $$(node, consts.id.ICON, setting);
-                        icoObj.attr({
-                            "style": "",
-                            "class": consts.className.BUTTON + " " + consts.className.ICO_LOADING
-                        });
+                        icoObj.attr({"style": "", "class": consts.className.BUTTON + " " + consts.className.ICO_LOADING});
                     }
 
                     var tmpParam = {};
@@ -3877,7 +3874,7 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
 
 
         var a = {
-            init: function () {
+            init: function(){
                 $.ajax({
                     url: data,
                     type: type,
@@ -3890,7 +3887,7 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
                             a.searchParam();
                         }
                         TREE_OBJ = $.fn.zTree.getZTreeObj(TREE_SELECT_BODY_ID);
-                        if (success) {
+                        if (success){
                             var obj = {
                                 treeId: TREE_SELECT_ID,
                                 data: d
@@ -3920,14 +3917,14 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
             focusInput: function () {
                 $('#' + TREE_INPUT_ID).focus();
             },
-            onClick: function (event, treeId, treeNode) {
+            onClick: function(event, treeId, treeNode){
                 var name = treeNode.name,
                     id = treeNode.id,
                     $input = $('#' + TREE_SELECT_TITLE_ID + ' input');
                 $input.val(name);
                 $('#' + TREE_SELECT_ID).removeClass(selected);
 
-                if (click) {
+                if (click){
                     var obj = {
                         data: DATA,
                         current: treeNode,
@@ -3941,18 +3938,18 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
                 $(elem).hide();
                 return a;
             },
-            input: function () {
+            input: function(){
                 var readonly = '';
                 if (!search) {
                     readonly = 'readonly';
                 }
-                var selectHtml = '<div class="' + TREE_SELECT_CLASS + ' layui-unselect layui-form-select" id="' + TREE_SELECT_ID + '">' +
-                    '<div class="' + TREE_SELECT_TITLE_CLASS + '" id="' + TREE_SELECT_TITLE_ID + '">' +
-                    ' <input type="text" id="' + TREE_INPUT_ID + '" placeholder="' + placeholder + '" value="" ' + readonly + ' class="layui-input layui-unselect">' +
+                var selectHtml = '<div class="'+ TREE_SELECT_CLASS +' layui-unselect layui-form-select" id="'+ TREE_SELECT_ID +'">' +
+                    '<div class="'+ TREE_SELECT_TITLE_CLASS +'" id="'+ TREE_SELECT_TITLE_ID +'">' +
+                    ' <input type="text" id="'+ TREE_INPUT_ID +'" placeholder="'+ placeholder +'" value="" '+ readonly +' class="layui-input layui-unselect">' +
                     '<i class="layui-edge"></i>' +
                     '</div>' +
                     '<div class="layui-anim layui-anim-upbit" style="">' +
-                    '<div class="' + TREE_SELECT_BODY_CLASS + ' ztree" id="' + TREE_SELECT_BODY_ID + '"></div>' +
+                    '<div class="'+ TREE_SELECT_BODY_CLASS +' ztree" id="'+ TREE_SELECT_BODY_ID +'"></div>' +
                     '</div>' +
                     '</div>';
                 $(elem).parent().append(selectHtml);
@@ -4002,7 +3999,7 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
                         var lis = $('#' + TREE_SELECT_ID + ' li[treenode]');
                         for (var i = 0; i < lis.length; i++) {
                             var oLi = lis.eq(i);
-                            if (!oLi.hasClass(TREE_SELECT_SEARCHED_CLASS)) {
+                            if (!oLi.hasClass(TREE_SELECT_SEARCHED_CLASS)){
                                 oLi.hide();
                             } else {
                                 oLi.show();
@@ -4020,7 +4017,7 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
                     var o = nodes[i],
                         pid = o.parentTId,
                         tid = o.tId;
-                    if (pid !== null) {
+                    if (pid !== null){
                         // 获取父节点
                         $('#' + pid).addClass(TREE_SELECT_SEARCHED_CLASS);
                         var pNode = TREE_OBJ.getNodesByParam("tId", pid, null);
@@ -4030,7 +4027,7 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
                 }
             },
             // 阻止Layui的一些默认事件
-            preventEvent: function () {
+            preventEvent: function() {
                 var item = '#' + TREE_SELECT_ID + ' .layui-anim';
                 a.event('click', item, function (e) {
                     e.stopPropagation();
@@ -4070,7 +4067,7 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
      * @param filter lay-filter属性
      * @param id 选中的id
      */
-    TreeSelect.prototype.checkNode = function (filter, id) {
+    TreeSelect.prototype.checkNode = function(filter, id){
         var o = obj.filter(filter),
             treeInput = o.find('.layui-select-title input'),
             treeObj = obj.treeObj(filter),
@@ -4090,11 +4087,11 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
     };
 
     var obj = {
-        filter: function (filter) {
+        filter: function(filter){
             if (!filter) {
                 layui.hint().error('filter 不能为空');
             }
-            var tf = $('*[lay-filter=' + filter + ']'),
+            var tf = $('*[lay-filter='+ filter +']'),
                 o = tf.next();
             return o;
         },
@@ -4108,5 +4105,6 @@ layui.define(['form', 'jquery'], function (exports) { //提示：模块也可以
 
     //输出接口
     var mod = new TreeSelect();
+    //输出test接口
     exports('treeSelect', mod);
-});    
+});

@@ -122,7 +122,7 @@
 
         //数据的渲染
         function setFormValues(data) {
-            form.val("updateForm", {
+            form.val("updateDept", {
                 id: data.id,
                 name: data.name,
                 num: data.num,
@@ -142,17 +142,19 @@
 
             if (layEvent === 'delete') {
 
-                axios.post('dept/delete', {id: data.id}).then(function (response) {
-                    debugger
-                    if (response.data.code == 200) {
-                        layer.msg(response.data.msg);
-                        //重新加载表格
-                        window.reload()
-                    }
-                }).catch(err => {
-                        console.log(err);
-                    }
-                );
+                layer.confirm("确定要删除吗?", {icon: 7, title: '警告', btn: ['确认', '放弃']}, function (index) {
+                    axios.post('dept/delete', {id: data.id}).then(function (response) {
+                        debugger
+                        if (response.data.code == 200) {
+                            layer.msg(response.data.msg);
+                            //重新加载表格
+                            window.reload()
+                        }
+                    }).catch(err => {
+                            console.log(err);
+                        }
+                    );
+                });
                 return false;
 
             } else if (layEvent === 'edit') {
