@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>患者管理</title>
+    <title>排班设置</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -13,7 +13,6 @@
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
-
         <fieldset class="table-search-fieldset">
             <legend>搜索信息</legend>
             <div style="margin: 10px 10px 10px 10px">
@@ -28,24 +27,28 @@
                         </div>
 
                         <div class="layui-inline">
-                            <label class="layui-form-label">手机号</label>
+                            <label class="layui-form-label">科室</label>
                             <div class="layui-input-inline">
-                                <input type="number" name="tel" autocomplete="off" class="layui-input"
-                                       placeholder="请输入手机号">
+                                <input type="text" name="deptId" id="tree_user_index" lay-filter="tree_user_index"
+                                       class="layui-input">
                             </div>
                         </div>
 
                         <div class="layui-inline">
-                            <label class="layui-form-label">医保</label>
-                            <input type="radio" name="status" value="true" title="有医保" class="layui-input">
-                            <input type="radio" name="status" value="false" title="无医保" class="layui-input">
+                            <label class="layui-form-label">职称</label>
+                            <div class="layui-input-inline">
+                                <select name="jobTitle" autocomplete="off" id="jobTitle" lay-filter="jobTitle"
+                                        lay-search="true" class="layui-input">
+                                    <option value="">请选择职称</option>
+                                </select>
+                            </div>
                         </div>
-
 
                         <div class="layui-form-item">
                             <div class="layui-btn-group">
                                 <button type="submit" class="layui-btn layui-btn-primary" lay-submit
-                                        lay-filter="data-search-btn"><i class="fa fa-search"></i> 搜 索 </button>
+                                        lay-filter="data-search-btn"><i class="fa fa-search"></i> 搜 索
+                                </button>
                                 <button class="layui-btn layui-btn-primary"><i class="fa fa-undo"></i> 撤 销</button>
                             </div>
                         </div>
@@ -56,14 +59,15 @@
 
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete">批量删除</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete">批量清空</button>
             </div>
         </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
         <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+            <a class="layui-btn layui-btn-xs layui-btn-normal data-count-edit" lay-event="edit">排班</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">清空</a>
         </script>
 
     </div>
@@ -71,20 +75,22 @@
 <script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script src="../../js/lay-config.js" charset="utf-8"></script>
 <script>
-    layui.use(['form', 'table', 'axios'], function () {
+    layui.use(['form', 'table', 'miniPage', 'treeSelect', 'axios'], function() {
         var $ = layui.jquery,
             form = layui.form,
             table = layui.table,
+            miniPage = layui.miniPage,
+            treeSelect = layui.treeSelect,
             axios = layui.axios;
 
         //重新加载 table
-        window.reload = function () {
+        window.reload = function() {
             table.reload('currentTableId');
         }
 
         table.render({
             elem: '#currentTableId',
-            url: 'http://localhost:9999/patient/queryPatientAll',
+            url: 'http://localhost:9999/user/queryUserAll',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -97,7 +103,16 @@
                 {field: 'realname', width: 80, title: '姓名', sort: true},
                 {field: 'sex', width: 80, title: '性别', sort: true},
                 {
-                    field: 'dateOfBirth', width: 80, title: '年龄', sort: true, templet: function (d) {
+                    field: 'roleName', width: 80, title: '类型', sort: true, templet: function(d) {
+                        if(d.roleName == 0) {
+                            return '<span class="layui-badge layui-bg-orange">管理员</span>'
+                        } else if(d.roleName == 1) {
+                            return '<span class="layui-badge layui-bg-green">医生</span>'
+                        }
+                    }
+                },
+                {
+                    field: 'dateOfBirth', width: 80, title: '年龄', sort: true, templet: function(d) {
                         var birth = d.dateOfBirth.split("-"),
                             birthYear = birth[0],
                             birthMonth = birth[1],
@@ -107,21 +122,21 @@
                             nowMonth = now.getMonth() + 1,
                             nowDay = now.getDay();
 
-                        if (nowYear == birthYear) {
+                        if(nowYear == birthYear) {
                             returnAge = 0;//同年 则为0周岁
                         } else {
                             var ageDiff = nowYear - birthYear; //年之差
-                            if (ageDiff > 0) {
-                                if (nowMonth == birthMonth) {
+                            if(ageDiff > 0) {
+                                if(nowMonth == birthMonth) {
                                     var dayDiff = nowDay - birthDay;//日之差
-                                    if (dayDiff < 0) {
+                                    if(dayDiff < 0) {
                                         returnAge = ageDiff - 1;
                                     } else {
                                         returnAge = ageDiff;
                                     }
                                 } else {
                                     var monthDiff = nowMonth - birthMonth;//月之差
-                                    if (monthDiff < 0) {
+                                    if(monthDiff < 0) {
                                         returnAge = ageDiff - 1;
                                     } else {
                                         returnAge = ageDiff;
@@ -135,18 +150,8 @@
 
                     }
                 },
-                {field: 'tel', minWidth: 120, title: '手机号'},
-                {field: 'email', minWidth: 150, title: '邮箱'},
-                {field: 'condition', width: 120, title: '病情',},
-                {
-                    field: 'status', width: 80, title: '医保', sort: true, templet: function (d) {
-                        if (d.status == true) {
-                            return '<span class="layui-badge layui-bg-green">有医保</span>'
-                        } else {
-                            return '<span class="layui-badge layui-bg-red">无医保</span>'
-                        }
-                    }
-                },
+                {field: 'deptName', width: 120, title: '科室', sort: true},
+                {field: 'jobTitle', width: 120, title: '职称', sort: true},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
@@ -155,8 +160,39 @@
             skin: 'line'
         });
 
+        //渲染 职称信息
+        axios.post('title/titleAll', {}).then(function(res) {
+            res.data.forEach(item => {
+                let option = `<option value="${item.name}">${item.name}</option>`
+                $('#jobTitle').append(option);
+            })
+            form.render();
+        });
+
+        // treeSelect
+        treeSelect.render({
+            // 选择器
+            elem: '#tree_user_index',
+            // 数据
+            data: 'http://localhost:9999/dept/queryDeptTree',
+            // 异步加载方式：get/post，默认get
+            type: 'get',
+            // 占位符
+            placeholder: '请选择科室',
+            // 是否开启搜索功能：true/false，默认false
+            search: true,
+            // 点击回调
+            click: function(d) {
+                console.log(d);
+                $("#tree_user_index").val(d.current.id)
+            },
+            // 加载完成后的回调函数
+            success: function(d) {
+            }
+        });
+
         // 监听搜索操作
-        form.on('submit(data-search-btn)', function (data) {
+        form.on('submit(data-search-btn)', function(data) {
 
             // 执行搜索重载
             console.log(data.field);
@@ -167,8 +203,8 @@
                 }
                 , where: {
                     realname: data.field.realname,
-                    tel: data.field.tel,
-                    status: data.field.status,
+                    deptId: data.field.deptId,
+                    jobTitle: data.field.jobTitle,
                 }
             }, 'data');
 
@@ -183,28 +219,30 @@
         // 当前弹出层，防止ID被覆盖
         var parentIndex = layer.index;
 
+
         /**
          * toolbar监听事件
          */
-        table.on('toolbar(currentTableFilter)', function (obj) {
-            //debugger
-            if (obj.event === 'delete') {  // 监听删除操作
+        table.on('toolbar(currentTableFilter)', function(obj) {
+            if(obj.event === 'delete') {  // 监听删除操作
                 // 批量删除
                 var checkStatus = table.checkStatus('currentTableId'),
                     data = checkStatus.data;
 
-                if (data.length == 0) {
-                    layer.msg("请选择你要删除的用户");
+                if(data.length == 0) {
+                    layer.msg("请选择你要删除的排班记录");
                 } else {
                     var ids = getIds(data);
+                    console.log(ids);
 
-                    layer.confirm("确定要删除吗?", {icon: 7, title: '警告', btn: ['确认', '放弃']}, function (index) {
+                    layer.confirm("确定要删除吗?", {icon: 7, title: '警告', btn: ['确认', '放弃']}, function(index) {
                         // 后端调用请求
-                        axios.post('patient/deleteByIds?ids=' + ids, data).then(function (response) {
-                            if (response.data.code == 200) {
+                        axios.post('setting/deleteByIds', {ids: ids}).then(function(response) {
+                            if(response.data.code == 200) {
                                 layer.msg(response.data.msg);
                                 //重新加载表格
                                 console.log(data);
+                                table.reload('currentTableId');
                                 window.reload();
                             }
                             //关闭弹出页面
@@ -221,28 +259,75 @@
         // 获取信息id
         function getIds(data) {
             var arr = [];
-            for (var i = 0; i < data.length; i++) {
+            for(var i = 0; i < data.length; i++) {
                 arr.push(data[i].id);
             }
             return arr;
         }
 
         //监听表格复选框选择
-        table.on('checkbox(currentTableFilter)', function (obj) {
+        table.on('checkbox(currentTableFilter)', function(obj) {
             console.log(obj)
         });
 
-        table.on('tool(currentTableFilter)', function (obj) {
+
+        //渲染数据 编辑
+        function setFormValues(datas) {
+            //通过axios向请求  data.id 用户id 医生id
+            axios.post('setting/queryListSettingByUserId', {userId: datas.id}).then(function(res) {
+                var data = res.data;
+                form.val('updateSubmit', {
+                    "userId": datas.id,
+                    "dayup1": data.dayup1,
+                    "daydown1": data.daydown1,
+                    "dayup2": data.dayup2,
+                    "daydown2": data.daydown2,
+                    "dayup3": data.dayup3,
+                    "daydown3": data.daydown3,
+                    "dayup4": data.dayup4,
+                    "daydown4": data.daydown4,
+                    "dayup5": data.dayup5,
+                    "daydown5": data.daydown5,
+                    "dayup6": data.dayup6,
+                    "daydown6": data.daydown6,
+                    "dayup7": data.dayup7,
+                    "daydown7": data.daydown7
+                });
+            });
+        }
+
+        table.on('tool(currentTableFilter)', function(obj) {
             var data = obj.data;
-            if (obj.event === 'delete') {
+            if(obj.event === 'edit') {
+                var content = miniPage.getHrefContent('init_set.html');
+
+                var index = layer.open({
+                    title: '排班设置',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['70%', '100%'],
+                    content: content,
+                });
+
+                //调用渲染数据
+                setFormValues(data);
+
+                $(window).on("resize", function() {
+                    layer.full(index);
+                });
+                return false;
+            } else if(obj.event === 'delete') {
                 //单个删除
                 console.log(data.id);
-                layer.confirm("确定要删除吗?", {icon: 7, title: '警告', btn: ['确认', '放弃']}, function (index) {
-                    axios.post('patient/deleteByIds?ids=' + data.id, data).then(function (response) {
-                        if (response.data.code == 200) {
+                layer.confirm("确定要删除吗?", {icon: 7, title: '警告', btn: ['确认', '放弃']}, function(index) {
+                    axios.post('setting/deleteByIds', {ids: data.id}).then(function(response) {
+                        if(response.data.code == 200) {
                             layer.msg(response.data.msg);
                             //重新加载表格
                             console.log(data);
+                            table.reload('currentTableId');
                             window.reload();
                         }
                         //关闭弹出页面
@@ -257,5 +342,6 @@
 
     });
 </script>
+
 </body>
 </html>

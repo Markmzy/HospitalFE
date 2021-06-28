@@ -42,7 +42,7 @@
 </script>
 
 <script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script src="../../js/lay-config.js" charset="utf-8"></script>
 
 <script>
     layui.use(['table', 'treetable', 'miniPage', 'axios', 'form'], function () {
@@ -82,9 +82,9 @@
                                 return '<span class="layui-badge layui-bg-orange">医院</span>';
                             }
                             if (d.type === 1) {
-                                return '<span class="layui-badge layui-bg-blue">科室</span>';
+                                return '<span class="layui-badge layui-bg-blue">部门</span>';
                             } else {
-                                return '<span class="layui-badge-rim">部门</span>';
+                                return '<span class="layui-badge-rim">科室</span>';
                             }
                         }, title: '类型'
                     },

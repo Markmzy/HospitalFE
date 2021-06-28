@@ -13,7 +13,6 @@
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
-
         <fieldset class="table-search-fieldset">
             <legend>搜索信息</legend>
             <div style="margin: 10px 10px 10px 10px">
@@ -30,7 +29,8 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">科室</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="deptId" id="tree_user_index" lay-filter="tree_user_index" class="layui-input">
+                                <input type="text" name="deptId" id="tree_user_index" lay-filter="tree_user_index"
+                                       class="layui-input">
                             </div>
                         </div>
 
@@ -38,15 +38,19 @@
                             <label class="layui-form-label">职称</label>
                             <div class="layui-input-inline">
                                 <select name="jobTitle" autocomplete="off" id="jobTitle_Index" lay-filter="jobTitle"
-                                        lay-search="" class="layui-input">
+                                        lay-search="true" class="layui-input">
                                     <option value="">请选择职称</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="layui-form-item">
-                            <button class="layui-btn layui-btn-primary"><i class="fa fa-undo"></i> 撤 销 </button>
-                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="fa fa-search"></i> 搜 索 </button>
+                            <div class="layui-btn-group">
+                                <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                        lay-filter="data-search-btn"><i class="fa fa-search"></i> 搜 索
+                                </button>
+                                <button class="layui-btn layui-btn-primary"><i class="fa fa-undo"></i> 撤 销</button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -55,7 +59,7 @@
 
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add">添加</button>
+                <button class="layui-btn layui-btn-green layui-btn-sm data-add-btn" lay-event="add">添加</button>
                 <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete">批量删除</button>
             </div>
         </script>
@@ -70,7 +74,7 @@
     </div>
 </div>
 <script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script src="../../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script src="../../js/lay-config.js" charset="utf-8"></script>
 <script>
     layui.use(['form', 'table', 'miniPage', 'treeSelect', 'axios'], function () {
         var $ = layui.jquery,
@@ -84,7 +88,6 @@
         window.reload = function () {
             table.reload('currentTableId');
         }
-
 
         table.render({
             elem: '#currentTableId',
@@ -101,7 +104,7 @@
                 {field: 'realname', width: 80, title: '姓名', sort: true},
                 {field: 'sex', width: 80, title: '性别', sort: true},
                 {
-                    field: 'roleName', width: 80, title: '类型', templet: function (d) {
+                    field: 'roleName', width: 80, title: '类型', sort: true, templet: function (d) {
                         if (d.roleName == 0) {
                             return '<span class="layui-badge layui-bg-orange">管理员</span>'
                         } else if (d.roleName == 1) {
@@ -200,7 +203,6 @@
         //     });
         // });
 
-
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
 
@@ -260,6 +262,7 @@
                     layer.msg("请选择你要删除的用户");
                 } else {
                     var ids = getIds(data);
+                    console.log(ids);
 
                     layer.confirm("确定要删除吗?", {icon: 7, title: '警告', btn: ['确认', '放弃']}, function (index) {
                         // 后端调用请求
