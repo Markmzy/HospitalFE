@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加预约</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <link rel="stylesheet" href="../../lib/font-awesome-4.7.0/css/font-awesome.css" media="all">
+</head>
+<body>
+<div class="layuimini-main">
+    <div class="layui-form layuimini-form">
+        <input type="hidden" name="type" id="type"/>
+        <input type="hidden" name="parentId" id="parentId"/>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label required">患者姓名：</label>
+            <div class="layui-input-block">
+                <select name="patientId" lay-verify="required" id="patientId" lay-search="">
+                    <option value="">选择患者</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属科室：</label>
+            <div class="layui-input-block">
+                <input type="text" name="deptId" id="tree" lay-filter="tree" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ">预约医生：</label>
+            <div class="layui-input-block">
+                <select name="userId" lay-verify="required" id="userId" lay-search="">
+                    <option value="">选择医生</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">预约时间：</label>
+            <div class="layui-input-block">
+                <input type="text" id="date" name="day" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">时间（上午/下午）：</label>
+            <div class="layui-input-block">
+                <select name="dayTime" lay-verify="required" id="dayTime" lay-search="">
+                    <option value="am">上午</option>
+                    <option value="pm">下午</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'axios', 'treeSelect', 'table', 'laydate'], function() {
+        var form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            axios = layui.axios,
+            laydate = layui.laydate,
+            $ = layui.$,
+            treeSelect = layui.treeSelect;
+
+        // 日期
+        laydate.render({
+            elem: '#date',
+            trigger: 'click'
+        });
+        form.render();
+
+        treeSelect.render({
+            // 选择器
+            elem: '#tree',
+            // 数据
+            data: 'http://localhost:9999/dept/queryDeptTree',
+            // 异步加载方式：get/post，默认get
+            type: 'get',
+            // 占位符
+            placeholder: '请选择科室',
+            // 是否开启搜索功能：true/false，默认false
+            search: true,
+            // 点击回调
+            click: function(d) {
+                console.log(d);
+                $("#tree").val(d.current.id)
+            },
+            // 加载完成后的回调函数
+            success: function(d) {
+            }
+        });
+
+        //向后端发送请求或者患者信息  支持高级模糊查询
+        //渲染 患者信息
+        axios.post('patient/queryPatientInfoAll', {}).then(function(res) {
+            res.data.forEach(item => {
+                let option = `<option value="${item.id}">${item.realname}</option>`
+                $('#patientId').append(option);
+            })
+            form.render();
+        });
+
+        //渲染 医生信息
+        axios.post('user/queryUserInfoAll', {}).then(function(res) {
+            res.data.forEach(item => {
+                let option = `<option value="${item.id}">${item.realname}, ${item.deptName}, ${item.jobTitle}</option>`
+                $('#userId').append(option);
+            })
+            form.render();
+        });
+
+        var parentIndex = layer.index;
+        //监听提交
+        form.on('submit(saveBtn)', function(data) {
+            var data = data.field;
+            axios.post('order/add', data).then(function(response) {
+                if(response.data.code == 200) {
+                    layer.msg(response.data.msg);
+                    //重新加载表格
+                    window.reload()
+                }
+                //关闭弹出页面
+                layer.close(parentIndex);
+            }).catch(err => {
+                    console.log(err);
+                }
+            );
+            return false;
+        });
+
+
+    });
+</script>
+</body>
+</html>

@@ -55,7 +55,7 @@
             },
             {
               "title": "预约挂号",
-              "href": "page/welcome-1.html",
+              "href": "page/order/index.html",
               "icon": "fa fa-phone",
               "target": "_self"
             },
@@ -81,7 +81,7 @@
           "child": [
             {
               "title": "科室统计",
-              "href": "page/statics/dept.html",
+              "href": "page/tongji/dept.html",
               "icon": "fa fa-pie-chart",
               "target": "_self"
             }
